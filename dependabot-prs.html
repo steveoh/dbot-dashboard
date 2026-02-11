@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dependabot Pull Requests</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#4d2a54',
+              secondary: '#eaca00'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .gradient-bg {
+        background: linear-gradient(135deg, #4d2a54 0%, #eaca00 100%);
+      }
+      .pr-count-gradient {
+        background: linear-gradient(135deg, #4d2a54, #eaca00);
+      }
+      .expanded .expand-icon {
+        transform: rotate(180deg);
+      }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center text-white mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">🤖 Dependabot Pull Requests</h1>
+            <p class="text-xl opacity-90">Open pull requests from Dependabot across all repositories</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4 mt-6">
+                <div class="bg-white/20 backdrop-blur-lg px-8 py-4 rounded-xl">
+                    <div class="text-3xl font-bold" id="total-prs">133</div>
+                    <div class="text-sm opacity-90">Total PRs</div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg px-8 py-4 rounded-xl">
+                    <div class="text-3xl font-bold" id="repo-count">35</div>
+                    <div class="text-sm opacity-90">Repositories</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 mb-8">
+            <h2 class="text-white text-xl font-semibold mb-4">🔍 Filters</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="language-filter" class="block text-white text-sm font-medium mb-2">Language</label>
+                    <select id="language-filter" class="w-full px-4 py-2 rounded-lg bg-white/90 backdrop-blur text-gray-800 border-0 focus:ring-2 focus:ring-primary">
+                        <option value="">All Languages</option>
+                        <option value="C#">C#</option><option value="HTML">HTML</option><option value="JavaScript">JavaScript</option><option value="Python">Python</option><option value="TypeScript">TypeScript</option><option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-white text-sm font-medium mb-2">Topics (select multiple)</label>
+                    <div class="bg-white/90 backdrop-blur rounded-lg p-3 max-h-48 overflow-y-auto">
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="api" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">api</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="api-rest" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">api-rest</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="arcgis" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">arcgis</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="arcgis-server" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">arcgis-server</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="artificial-intelligence" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">artificial-intelligence</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="aspnet-core" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">aspnet-core</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="aspnet-core-mvc" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">aspnet-core-mvc</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="aspnetcore" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">aspnetcore</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="astro" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">astro</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="billable" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">billable</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="computer-vision" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">computer-vision</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="dnr" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">dnr</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="documentation" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">documentation</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="dts-partnership" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">dts-partnership</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="esri" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">esri</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="etl" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">etl</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="fgdb" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">fgdb</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="file-geodatabase" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">file-geodatabase</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="firebase" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">firebase</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="forklift-pallet" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">forklift-pallet</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="geodatabase" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">geodatabase</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="geojson" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">geojson</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="geolocation" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">geolocation</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="geospatial" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">geospatial</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="geospatial-data" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">geospatial-data</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="gis" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">gis</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="github-action" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">github-action</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="github-composite-action" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">github-composite-action</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="government" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">government</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="government-app" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">government-app</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="government-data" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">government-data</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="government-organisations" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">government-organisations</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="html" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">html</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="http-api" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">http-api</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="image" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">image</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="machine-learning" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">machine-learning</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="manual-tool" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">manual-tool</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="markdown" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">markdown</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="mobile-app" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">mobile-app</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="netlify" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">netlify</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="npm-package" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">npm-package</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="open-data" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">open-data</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="palletjack-skid" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">palletjack-skid</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="python" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">python</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="python-package" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">python-package</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="react" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">react</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="salesforce" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">salesforce</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="scheduled-tool" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">scheduled-tool</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="self-service" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">self-service</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="shapefile" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">shapefile</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="spatial-data-life-cycle" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">spatial-data-life-cycle</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="starlight" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">starlight</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="tailwindcss" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">tailwindcss</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="terraform-managed" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">terraform-managed</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="utah" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">utah</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="watershed-restoration" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">watershed-restoration</span>
+                            </label>
+                        
+                            <label class="flex items-center py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+                                <input type="checkbox" value="website" class="topic-checkbox mr-2 w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2">
+                                <span class="text-gray-800 text-sm">website</span>
+                            </label>
+                        
+                    </div>
+                </div>
+            </div>
+            <button onclick="clearFilters()" class="mt-4 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors">
+                Clear Filters
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="repos-grid">
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="billable,dnr,dts-partnership,government-app,terraform-managed,watershed-restoration,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/wri" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">wri</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">10</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">dnr</span>
+                        <span class="text-gray-500 text-xs">+5</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/114" class="font-semibold text-primary text-sm hover:underline" target="_blank">#114</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump @modelcontextprotocol/sdk from 1.24.2 to 1.26.0</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/113" class="font-semibold text-primary text-sm hover:underline" target="_blank">#113</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump @modelcontextprotocol/sdk from 1.24.2 to 1.26.0 in /functions</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/112" class="font-semibold text-primary text-sm hover:underline" target="_blank">#112</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group across 2 directories with 28 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/111" class="font-semibold text-primary text-sm hover:underline" target="_blank">#111</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-dependencies group across 2 directories with 13 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/110" class="font-semibold text-primary text-sm hover:underline" target="_blank">#110</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump lodash from 4.17.21 to 4.17.23 in /functions</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/28/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/109" class="font-semibold text-primary text-sm hover:underline" target="_blank">#109</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump lodash from 4.17.21 to 4.17.23</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/28/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/108" class="font-semibold text-primary text-sm hover:underline" target="_blank">#108</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump lodash-es from 4.17.21 to 4.17.23</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/21/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/102" class="font-semibold text-primary text-sm hover:underline" target="_blank">#102</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump qs from 6.14.0 to 6.14.1</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/16/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/101" class="font-semibold text-primary text-sm hover:underline" target="_blank">#101</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump qs from 6.14.0 to 6.14.1 in /functions</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/16/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wri/pull/97" class="font-semibold text-primary text-sm hover:underline" target="_blank">#97</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/turn-gps-billpay" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">turn-gps-billpay</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">9</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/219" class="font-semibold text-primary text-sm hover:underline" target="_blank">#219</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump axios from 1.13.2 to 1.13.5</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/11/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/218" class="font-semibold text-primary text-sm hover:underline" target="_blank">#218</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump axios from 1.13.2 to 1.13.5 in /functions</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/11/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/217" class="font-semibold text-primary text-sm hover:underline" target="_blank">#217</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump @apollo/server from 5.1.0 to 5.4.0 in /functions</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/216" class="font-semibold text-primary text-sm hover:underline" target="_blank">#216</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump lodash from 4.17.21 to 4.17.23</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/30/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/215" class="font-semibold text-primary text-sm hover:underline" target="_blank">#215</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump react-router from 7.9.5 to 7.12.0</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/8/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/214" class="font-semibold text-primary text-sm hover:underline" target="_blank">#214</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-app-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/213" class="font-semibold text-primary text-sm hover:underline" target="_blank">#213</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-app-dependencies group with 22 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/212" class="font-semibold text-primary text-sm hover:underline" target="_blank">#212</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump mssql from 11.0.1 to 12.0.0 in /functions in the major-function-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/turn-gps-billpay/pull/211" class="font-semibold text-primary text-sm hover:underline" target="_blank">#211</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-function-dependencies group in /functions with 4 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,forklift-pallet,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/deq-enviro" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">deq-enviro</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">7</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">forklift-pallet</span>
+                        <span class="text-gray-500 text-xs">+3</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/886" class="font-semibold text-primary text-sm hover:underline" target="_blank">#886</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump happy-dom from 20.0.10 to 20.3.4</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/884" class="font-semibold text-primary text-sm hover:underline" target="_blank">#884</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump lodash-es from 4.17.21 to 4.17.22</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/21/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/881" class="font-semibold text-primary text-sm hover:underline" target="_blank">#881</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group across 2 directories with 37 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/13/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/880" class="font-semibold text-primary text-sm hover:underline" target="_blank">#880</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-dependencies group across 1 directory with 3 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/13/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/874" class="font-semibold text-primary text-sm hover:underline" target="_blank">#874</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10 in /cloudrun</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/873" class="font-semibold text-primary text-sm hover:underline" target="_blank">#873</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/13/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-enviro/pull/872" class="font-semibold text-primary text-sm hover:underline" target="_blank">#872</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(docker): bump osgeo/gdal from ubuntu-small-3.8.5 to ubuntu-small-3.12.1 in /cloudrun in the docker-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,scheduled-tool,spatial-data-life-cycle,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/project-moonwalk" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">project-moonwalk</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">6</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">scheduled-tool</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/project-moonwalk/pull/104" class="font-semibold text-primary text-sm hover:underline" target="_blank">#104</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump vitest from 3.2.4 to 4.0.6 in the major-dependencies group across 1 directory</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/project-moonwalk/pull/103" class="font-semibold text-primary text-sm hover:underline" target="_blank">#103</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group across 2 directories with 24 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/project-moonwalk/pull/102" class="font-semibold text-primary text-sm hover:underline" target="_blank">#102</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10 in /jobs</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/project-moonwalk/pull/101" class="font-semibold text-primary text-sm hover:underline" target="_blank">#101</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to ==9.* in /functions/python</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/project-moonwalk/pull/100" class="font-semibold text-primary text-sm hover:underline" target="_blank">#100</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: update firebase-functions requirement from ~=0.4.3 to ~=0.5.0 in /functions/python</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/project-moonwalk/pull/99" class="font-semibold text-primary text-sm hover:underline" target="_blank">#99</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group across 1 directory with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="github-action,government-app,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/validate-address-action" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">validate-address-action</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">5</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">github-action</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/validate-address-action/pull/53" class="font-semibold text-primary text-sm hover:underline" target="_blank">#53</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump js-yaml from 4.1.0 to 4.1.1</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/3/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/validate-address-action/pull/52" class="font-semibold text-primary text-sm hover:underline" target="_blank">#52</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump glob from 11.0.3 to 11.1.0</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/3/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/validate-address-action/pull/51" class="font-semibold text-primary text-sm hover:underline" target="_blank">#51</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump vitest from 3.2.4 to 4.0.6 in the major-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/validate-address-action/pull/50" class="font-semibold text-primary text-sm hover:underline" target="_blank">#50</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 9 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/validate-address-action/pull/49" class="font-semibold text-primary text-sm hover:underline" target="_blank">#49</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="HTML"
+                     data-topics="billable,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/wfrc-wasatch-choice" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">wfrc-wasatch-choice</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">4</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            HTML
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wfrc-wasatch-choice/pull/342" class="font-semibold text-primary text-sm hover:underline" target="_blank">#342</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump axios from 1.13.1 to 1.13.5</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/11/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wfrc-wasatch-choice/pull/340" class="font-semibold text-primary text-sm hover:underline" target="_blank">#340</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wfrc-wasatch-choice/pull/339" class="font-semibold text-primary text-sm hover:underline" target="_blank">#339</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 26 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/wfrc-wasatch-choice/pull/338" class="font-semibold text-primary text-sm hover:underline" target="_blank">#338</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,government-app,scheduled-tool,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/plpco-rdcc-notifications" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">plpco-rdcc-notifications</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plpco-rdcc-notifications/pull/194" class="font-semibold text-primary text-sm hover:underline" target="_blank">#194</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump axios from 1.13.2 to 1.13.5</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/11/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plpco-rdcc-notifications/pull/193" class="font-semibold text-primary text-sm hover:underline" target="_blank">#193</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 5 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plpco-rdcc-notifications/pull/192" class="font-semibold text-primary text-sm hover:underline" target="_blank">#192</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/electrofishing" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">electrofishing</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        
+                        
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/electrofishing/pull/506" class="font-semibold text-primary text-sm hover:underline" target="_blank">#506</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group across 1 directory with 3 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/electrofishing/pull/505" class="font-semibold text-primary text-sm hover:underline" target="_blank">#505</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the major-app-dependencies group with 6 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/electrofishing/pull/504" class="font-semibold text-primary text-sm hover:underline" target="_blank">#504</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-app-dependencies group with 16 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/4/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="billable,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/broadband" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">broadband</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/broadband/pull/215" class="font-semibold text-primary text-sm hover:underline" target="_blank">#215</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump glob from 10.4.5 to 10.5.0</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/21/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/broadband/pull/214" class="font-semibold text-primary text-sm hover:underline" target="_blank">#214</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 12 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/broadband/pull/213" class="font-semibold text-primary text-sm hover:underline" target="_blank">#213</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">build(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="forklift-pallet,government-app,salesforce,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/deq-spills" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">deq-spills</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">forklift-pallet</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+3</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-spills/pull/183" class="font-semibold text-primary text-sm hover:underline" target="_blank">#183</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group across 3 directories with 24 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/16/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-spills/pull/182" class="font-semibold text-primary text-sm hover:underline" target="_blank">#182</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the major-dependencies group across 1 directory with 4 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-spills/pull/180" class="font-semibold text-primary text-sm hover:underline" target="_blank">#180</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,scheduled-tool,spatial-data-life-cycle,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/dolly-carton" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">dolly-carton</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">scheduled-tool</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/dolly-carton/pull/48" class="font-semibold text-primary text-sm hover:underline" target="_blank">#48</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/dolly-carton/pull/47" class="font-semibold text-primary text-sm hover:underline" target="_blank">#47</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group across 1 directory</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/dolly-carton/pull/46" class="font-semibold text-primary text-sm hover:underline" target="_blank">#46</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(docker): bump osgeo/gdal from ubuntu-full-3.11.4 to ubuntu-full-3.12.1 in the docker-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="github-action,government-app,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/create-reminder-action" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">create-reminder-action</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">github-action</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/create-reminder-action/pull/272" class="font-semibold text-primary text-sm hover:underline" target="_blank">#272</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the major-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/create-reminder-action/pull/271" class="font-semibold text-primary text-sm hover:underline" target="_blank">#271</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the safe-dependencies group with 6 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/create-reminder-action/pull/270" class="font-semibold text-primary text-sm hover:underline" target="_blank">#270</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/plpco-access-map" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">plpco-access-map</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plpco-access-map/pull/242" class="font-semibold text-primary text-sm hover:underline" target="_blank">#242</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the major-dependencies group with 5 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plpco-access-map/pull/241" class="font-semibold text-primary text-sm hover:underline" target="_blank">#241</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 11 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plpco-access-map/pull/240" class="font-semibold text-primary text-sm hover:underline" target="_blank">#240</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="github-action,government-app,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/reminder-action" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">reminder-action</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">github-action</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/reminder-action/pull/221" class="font-semibold text-primary text-sm hover:underline" target="_blank">#221</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the major-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/reminder-action/pull/220" class="font-semibold text-primary text-sm hover:underline" target="_blank">#220</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the safe-dependencies group with 5 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/reminder-action/pull/219" class="font-semibold text-primary text-sm hover:underline" target="_blank">#219</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="github-action,government-app,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/service-now-worknote-action" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">service-now-worknote-action</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">github-action</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/service-now-worknote-action/pull/132" class="font-semibold text-primary text-sm hover:underline" target="_blank">#132</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-dependencies group with 4 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/service-now-worknote-action/pull/131" class="font-semibold text-primary text-sm hover:underline" target="_blank">#131</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the safe-dependencies group with 5 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/service-now-worknote-action/pull/130" class="font-semibold text-primary text-sm hover:underline" target="_blank">#130</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/plss" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">plss</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plss/pull/510" class="font-semibold text-primary text-sm hover:underline" target="_blank">#510</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-app-dependencies group with 11 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plss/pull/509" class="font-semibold text-primary text-sm hover:underline" target="_blank">#509</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-app-dependencies group with 23 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/plss/pull/508" class="font-semibold text-primary text-sm hover:underline" target="_blank">#508</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="artificial-intelligence,computer-vision,gis,government,image,machine-learning,utah">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/udot-parcel-ml" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">udot-parcel-ml</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">artificial-intelligence</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">computer-vision</span>
+                        <span class="text-gray-500 text-xs">+5</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/udot-parcel-ml/pull/173" class="font-semibold text-primary text-sm hover:underline" target="_blank">#173</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: update google-cloud-storage requirement from ~=3.4 to ~=3.7</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/udot-parcel-ml/pull/172" class="font-semibold text-primary text-sm hover:underline" target="_blank">#172</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: update fastparquet requirement from ~=2024.11 to ~=2025.12</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/udot-parcel-ml/pull/171" class="font-semibold text-primary text-sm hover:underline" target="_blank">#171</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump buildpacks/github-actions from 5.9.7 to 5.10.0 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="government-app,npm-package,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/firebase-auth-arcgis-server-proxy" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">firebase-auth-arcgis-server-proxy</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">3</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">npm-package</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/firebase-auth-arcgis-server-proxy/pull/196" class="font-semibold text-primary text-sm hover:underline" target="_blank">#196</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the major-dependencies group with 2 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/firebase-auth-arcgis-server-proxy/pull/195" class="font-semibold text-primary text-sm hover:underline" target="_blank">#195</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 6 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/firebase-auth-arcgis-server-proxy/pull/194" class="font-semibold text-primary text-sm hover:underline" target="_blank">#194</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 12/31/2025</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,government-app,salesforce,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/deq-tanks-salesforce" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">deq-tanks-salesforce</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">2</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-tanks-salesforce/pull/9" class="font-semibold text-primary text-sm hover:underline" target="_blank">#9</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump the safe-dependencies group with 8 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-tanks-salesforce/pull/8" class="font-semibold text-primary text-sm hover:underline" target="_blank">#8</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,http-api,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/masquerade" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">masquerade</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">2</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">http-api</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/masquerade/pull/252" class="font-semibold text-primary text-sm hover:underline" target="_blank">#252</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/masquerade/pull/251" class="font-semibold text-primary text-sm hover:underline" target="_blank">#251</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/parcels" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">parcels</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">2</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">terraform-managed</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/parcels/pull/233" class="font-semibold text-primary text-sm hover:underline" target="_blank">#233</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump vitest from 3.2.4 to 4.0.6 in the major-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/parcels/pull/232" class="font-semibold text-primary text-sm hover:underline" target="_blank">#232</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump the safe-dependencies group with 24 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,scheduled-tool,spatial-data-life-cycle,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/sweeper" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">sweeper</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">2</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">scheduled-tool</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/sweeper/pull/144" class="font-semibold text-primary text-sm hover:underline" target="_blank">#144</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/sweeper/pull/143" class="font-semibold text-primary text-sm hover:underline" target="_blank">#143</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 3 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,scheduled-tool,spatial-data-life-cycle,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/open-sgid" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">open-sgid</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">2</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">scheduled-tool</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/open-sgid/pull/93" class="font-semibold text-primary text-sm hover:underline" target="_blank">#93</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/open-sgid/pull/92" class="font-semibold text-primary text-sm hover:underline" target="_blank">#92</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,python-package,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/supervisor" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">supervisor</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">2</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">python-package</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/supervisor/pull/63" class="font-semibold text-primary text-sm hover:underline" target="_blank">#63</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/3/2026</div>
+                            </div>
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/supervisor/pull/62" class="font-semibold text-primary text-sm hover:underline" target="_blank">#62</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 3 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/3/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="C#"
+                     data-topics="api,api-rest,aspnet-core,aspnet-core-mvc,aspnetcore,astro,documentation,esri,firebase,geojson,geolocation,government,react,self-service,starlight,utah">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/api.mapserv.utah.gov" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">api.mapserv.utah.gov</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            C#
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">api</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">api-rest</span>
+                        <span class="text-gray-500 text-xs">+14</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/api.mapserv.utah.gov/pull/644" class="font-semibold text-primary text-sm hover:underline" target="_blank">#644</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(web): bump axios from 1.13.2 to 1.13.5 in /src/developer/functions</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/11/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="HTML"
+                     data-topics="astro,geodatabase,gis,government,government-data,government-organisations,html,markdown,netlify,open-data,shapefile,tailwindcss,utah,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/gis.utah.gov" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">gis.utah.gov</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            HTML
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">astro</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">geodatabase</span>
+                        <span class="text-gray-500 text-xs">+12</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/gis.utah.gov/pull/3228" class="font-semibold text-primary text-sm hover:underline" target="_blank">#3228</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the npm_and_yarn group across 2 directories with 3 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/11/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="JavaScript"
+                     data-topics="billable,government-app,mobile-app,palletjack-skid,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/roadkill-mobile" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">roadkill-mobile</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            JavaScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+4</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/roadkill-mobile/pull/381" class="font-semibold text-primary text-sm hover:underline" target="_blank">#381</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the npm_and_yarn group across 4 directories with 9 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/3/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,palletjack-skid,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/skid" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">skid</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">palletjack-skid</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/skid/pull/46" class="font-semibold text-primary text-sm hover:underline" target="_blank">#46</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: update ugrc-palletjack requirement from <5.3,>=5.0 to >=5.0,<6.1</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="billable,government-app,palletjack-skid,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/deq-eid-skid" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">deq-eid-skid</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/deq-eid-skid/pull/46" class="font-semibold text-primary text-sm hover:underline" target="_blank">#46</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: update ugrc-palletjack requirement from ==5.* to >=5,<7</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="billable,government-app,palletjack-skid,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/nfhl-skid" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">nfhl-skid</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/nfhl-skid/pull/55" class="font-semibold text-primary text-sm hover:underline" target="_blank">#55</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: update ugrc-palletjack requirement from <5.3,>=5.0 to >=5.0,<6.1</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 2/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/honeycomb" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">honeycomb</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        
+                        
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/honeycomb/pull/38" class="font-semibold text-primary text-sm hover:underline" target="_blank">#38</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): update pytest requirement from ==8.* to >=8,<10</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Unknown"
+                     data-topics="github-composite-action,government-app,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/cloud-run-docker-deploy-composite-action" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">cloud-run-docker-deploy-composite-action</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Unknown
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">github-composite-action</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+1</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/cloud-run-docker-deploy-composite-action/pull/38" class="font-semibold text-primary text-sm hover:underline" target="_blank">#38</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps: bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="government-app,manual-tool,python-package,spatial-data-life-cycle,terraform-managed">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/swapper" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">swapper</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">manual-tool</span>
+                        <span class="text-gray-500 text-xs">+3</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/swapper/pull/41" class="font-semibold text-primary text-sm hover:underline" target="_blank">#41</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump the ci-dependencies group with 3 updates</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="TypeScript"
+                     data-topics="billable,government-app,terraform-managed,website">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/electrofishing-query" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">electrofishing-query</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            TypeScript
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">billable</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">government-app</span>
+                        <span class="text-gray-500 text-xs">+2</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/electrofishing-query/pull/324" class="font-semibold text-primary text-sm hover:underline" target="_blank">#324</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">deps(dev): bump storybook from 9.1.16 to 9.1.17</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+                <div class="repo-card bg-white rounded-xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer relative"
+                     onclick="toggleRepo(this)"
+                     data-language="Python"
+                     data-topics="arcgis,arcgis-server,esri,etl,fgdb,file-geodatabase,geospatial,geospatial-data,python">
+                    <div class="flex justify-between items-start mb-2">
+                        <a href="https://github.com/agrc/forklift" class="text-xl font-semibold text-gray-800 hover:text-primary transition-colors" onclick="event.stopPropagation()" target="_blank">forklift</a>
+                        <div class="pr-count-gradient text-white px-4 py-2 rounded-full font-bold text-lg min-w-[50px] text-center">1</div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full mr-2">
+                            Python
+                        </span>
+                        <span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">arcgis</span><span class="inline-block px-2 py-1 bg-primary/20 text-primary text-xs rounded-full mr-1">arcgis-server</span>
+                        <span class="text-gray-500 text-xs">+7</span>
+                    </div>
+                    <div class="hidden pr-list mt-4 border-t-2 border-gray-200 pt-4 max-h-96 overflow-y-auto">
+                        
+                            <div class="p-3 mb-2 bg-gray-50 rounded-lg border-l-4 border-primary hover:bg-gray-100 transition-colors">
+                                <a href="https://github.com/agrc/forklift/pull/395" class="font-semibold text-primary text-sm hover:underline" target="_blank">#395</a>
+                                <div class="text-gray-800 mt-1 text-sm leading-relaxed">chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group</div>
+                                <div class="text-gray-500 text-xs mt-1">Updated: 1/1/2026</div>
+                            </div>
+                        
+                    </div>
+                    <div class="expand-icon absolute bottom-4 right-4 text-gray-400 text-2xl transition-transform duration-300">▼</div>
+                </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const reposData = [{"name":"wri","fullName":"agrc/wri","url":"https://github.com/agrc/wri","language":"TypeScript","topics":["billable","dnr","dts-partnership","government-app","terraform-managed","watershed-restoration","website"],"prs":[{"number":114,"title":"deps: bump @modelcontextprotocol/sdk from 1.24.2 to 1.26.0","url":"https://github.com/agrc/wri/pull/114","created":"2026-02-04T20:35:57Z","updated":"2026-02-04T20:35:58Z"},{"number":113,"title":"deps: bump @modelcontextprotocol/sdk from 1.24.2 to 1.26.0 in /functions","url":"https://github.com/agrc/wri/pull/113","created":"2026-02-04T20:35:25Z","updated":"2026-02-04T20:35:26Z"},{"number":112,"title":"deps: bump the safe-dependencies group across 2 directories with 28 updates","url":"https://github.com/agrc/wri/pull/112","created":"2026-02-01T23:02:43Z","updated":"2026-02-01T23:02:44Z"},{"number":111,"title":"deps: bump the major-dependencies group across 2 directories with 13 updates","url":"https://github.com/agrc/wri/pull/111","created":"2026-02-01T22:58:59Z","updated":"2026-02-01T22:59:00Z"},{"number":110,"title":"deps: bump lodash from 4.17.21 to 4.17.23 in /functions","url":"https://github.com/agrc/wri/pull/110","created":"2026-01-28T19:15:15Z","updated":"2026-01-28T19:15:16Z"},{"number":109,"title":"deps: bump lodash from 4.17.21 to 4.17.23","url":"https://github.com/agrc/wri/pull/109","created":"2026-01-28T19:15:07Z","updated":"2026-01-28T19:15:08Z"},{"number":108,"title":"deps: bump lodash-es from 4.17.21 to 4.17.23","url":"https://github.com/agrc/wri/pull/108","created":"2026-01-22T00:44:12Z","updated":"2026-01-22T00:44:12Z"},{"number":102,"title":"deps: bump qs from 6.14.0 to 6.14.1","url":"https://github.com/agrc/wri/pull/102","created":"2026-01-16T23:23:28Z","updated":"2026-01-16T23:23:28Z"},{"number":101,"title":"deps: bump qs from 6.14.0 to 6.14.1 in /functions","url":"https://github.com/agrc/wri/pull/101","created":"2026-01-16T23:23:23Z","updated":"2026-01-16T23:23:23Z"},{"number":97,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/wri/pull/97","created":"2026-01-01T22:08:54Z","updated":"2026-02-01T22:54:25Z"}]},{"name":"turn-gps-billpay","fullName":"agrc/turn-gps-billpay","url":"https://github.com/agrc/turn-gps-billpay","language":"JavaScript","topics":["billable","government-app","terraform-managed","website"],"prs":[{"number":219,"title":"deps: bump axios from 1.13.2 to 1.13.5","url":"https://github.com/agrc/turn-gps-billpay/pull/219","created":"2026-02-11T19:35:43Z","updated":"2026-02-11T19:35:44Z"},{"number":218,"title":"deps: bump axios from 1.13.2 to 1.13.5 in /functions","url":"https://github.com/agrc/turn-gps-billpay/pull/218","created":"2026-02-11T19:33:25Z","updated":"2026-02-11T19:33:26Z"},{"number":217,"title":"deps: bump @apollo/server from 5.1.0 to 5.4.0 in /functions","url":"https://github.com/agrc/turn-gps-billpay/pull/217","created":"2026-02-04T18:03:51Z","updated":"2026-02-04T18:03:52Z"},{"number":216,"title":"deps: bump lodash from 4.17.21 to 4.17.23","url":"https://github.com/agrc/turn-gps-billpay/pull/216","created":"2026-01-30T20:20:32Z","updated":"2026-01-30T20:20:33Z"},{"number":215,"title":"deps: bump react-router from 7.9.5 to 7.12.0","url":"https://github.com/agrc/turn-gps-billpay/pull/215","created":"2026-01-09T00:21:25Z","updated":"2026-01-09T00:21:26Z"},{"number":214,"title":"deps: bump the major-app-dependencies group with 2 updates","url":"https://github.com/agrc/turn-gps-billpay/pull/214","created":"2026-01-01T12:07:39Z","updated":"2026-01-01T12:07:40Z"},{"number":213,"title":"deps: bump the safe-app-dependencies group with 22 updates","url":"https://github.com/agrc/turn-gps-billpay/pull/213","created":"2026-01-01T12:06:09Z","updated":"2026-01-01T12:06:10Z"},{"number":212,"title":"deps: bump mssql from 11.0.1 to 12.0.0 in /functions in the major-function-dependencies group","url":"https://github.com/agrc/turn-gps-billpay/pull/212","created":"2026-01-01T11:55:13Z","updated":"2026-01-01T11:55:14Z"},{"number":211,"title":"deps: bump the safe-function-dependencies group in /functions with 4 updates","url":"https://github.com/agrc/turn-gps-billpay/pull/211","created":"2026-01-01T11:55:00Z","updated":"2026-01-01T11:55:01Z"}]},{"name":"deq-enviro","fullName":"agrc/deq-enviro","url":"https://github.com/agrc/deq-enviro","language":"JavaScript","topics":["billable","forklift-pallet","government-app","terraform-managed","website"],"prs":[{"number":886,"title":"deps(dev): bump happy-dom from 20.0.10 to 20.3.4","url":"https://github.com/agrc/deq-enviro/pull/886","created":"2026-02-04T20:35:14Z","updated":"2026-02-04T20:35:15Z"},{"number":884,"title":"deps: bump lodash-es from 4.17.21 to 4.17.22","url":"https://github.com/agrc/deq-enviro/pull/884","created":"2026-01-21T23:08:36Z","updated":"2026-01-21T23:08:36Z"},{"number":881,"title":"deps: bump the safe-dependencies group across 2 directories with 37 updates","url":"https://github.com/agrc/deq-enviro/pull/881","created":"2026-01-13T22:57:30Z","updated":"2026-01-13T22:57:31Z"},{"number":880,"title":"deps: bump the major-dependencies group across 1 directory with 3 updates","url":"https://github.com/agrc/deq-enviro/pull/880","created":"2026-01-13T22:15:35Z","updated":"2026-01-13T22:15:36Z"},{"number":874,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10 in /cloudrun","url":"https://github.com/agrc/deq-enviro/pull/874","created":"2026-01-01T04:55:38Z","updated":"2026-01-01T04:55:39Z"},{"number":873,"title":"chore(deps): bump the ci-dependencies group with 2 updates","url":"https://github.com/agrc/deq-enviro/pull/873","created":"2026-01-01T04:54:17Z","updated":"2026-01-13T22:00:16Z"},{"number":872,"title":"deps(docker): bump osgeo/gdal from ubuntu-small-3.8.5 to ubuntu-small-3.12.1 in /cloudrun in the docker-dependencies group","url":"https://github.com/agrc/deq-enviro/pull/872","created":"2026-01-01T04:54:10Z","updated":"2026-01-01T04:54:11Z"}]},{"name":"project-moonwalk","fullName":"agrc/project-moonwalk","url":"https://github.com/agrc/project-moonwalk","language":"Python","topics":["government-app","scheduled-tool","spatial-data-life-cycle","terraform-managed"],"prs":[{"number":104,"title":"deps(dev): bump vitest from 3.2.4 to 4.0.6 in the major-dependencies group across 1 directory","url":"https://github.com/agrc/project-moonwalk/pull/104","created":"2026-01-01T18:20:42Z","updated":"2026-01-01T18:20:43Z"},{"number":103,"title":"deps: bump the safe-dependencies group across 2 directories with 24 updates","url":"https://github.com/agrc/project-moonwalk/pull/103","created":"2026-01-01T18:18:58Z","updated":"2026-01-01T18:18:59Z"},{"number":102,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10 in /jobs","url":"https://github.com/agrc/project-moonwalk/pull/102","created":"2026-01-01T17:55:54Z","updated":"2026-01-01T17:55:55Z"},{"number":101,"title":"deps(dev): update pytest requirement from ==8.* to ==9.* in /functions/python","url":"https://github.com/agrc/project-moonwalk/pull/101","created":"2026-01-01T17:55:45Z","updated":"2026-01-01T17:55:46Z"},{"number":100,"title":"deps: update firebase-functions requirement from ~=0.4.3 to ~=0.5.0 in /functions/python","url":"https://github.com/agrc/project-moonwalk/pull/100","created":"2026-01-01T17:55:38Z","updated":"2026-01-01T17:55:39Z"},{"number":99,"title":"chore(deps): bump the ci-dependencies group across 1 directory with 2 updates","url":"https://github.com/agrc/project-moonwalk/pull/99","created":"2026-01-01T17:55:04Z","updated":"2026-01-01T17:55:05Z"}]},{"name":"validate-address-action","fullName":"agrc/validate-address-action","url":"https://github.com/agrc/validate-address-action","language":"TypeScript","topics":["github-action","government-app","terraform-managed"],"prs":[{"number":53,"title":"deps: bump js-yaml from 4.1.0 to 4.1.1","url":"https://github.com/agrc/validate-address-action/pull/53","created":"2026-02-03T20:02:26Z","updated":"2026-02-03T20:02:27Z"},{"number":52,"title":"deps: bump glob from 11.0.3 to 11.1.0","url":"https://github.com/agrc/validate-address-action/pull/52","created":"2026-02-03T20:02:15Z","updated":"2026-02-03T20:02:16Z"},{"number":51,"title":"deps(dev): bump vitest from 3.2.4 to 4.0.6 in the major-dependencies group","url":"https://github.com/agrc/validate-address-action/pull/51","created":"2026-01-01T23:56:00Z","updated":"2026-01-01T23:56:00Z"},{"number":50,"title":"deps: bump the safe-dependencies group with 9 updates","url":"https://github.com/agrc/validate-address-action/pull/50","created":"2026-01-01T23:55:43Z","updated":"2026-01-01T23:55:44Z"},{"number":49,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/validate-address-action/pull/49","created":"2026-01-01T23:54:16Z","updated":"2026-01-01T23:54:17Z"}]},{"name":"wfrc-wasatch-choice","fullName":"agrc/wfrc-wasatch-choice","url":"https://github.com/agrc/wfrc-wasatch-choice","language":"HTML","topics":["billable","government-app","terraform-managed","website"],"prs":[{"number":342,"title":"deps: bump axios from 1.13.1 to 1.13.5","url":"https://github.com/agrc/wfrc-wasatch-choice/pull/342","created":"2026-02-11T19:00:13Z","updated":"2026-02-11T19:00:14Z"},{"number":340,"title":"deps: bump the major-dependencies group with 2 updates","url":"https://github.com/agrc/wfrc-wasatch-choice/pull/340","created":"2026-01-01T23:02:05Z","updated":"2026-02-04T23:14:53Z"},{"number":339,"title":"deps: bump the safe-dependencies group with 26 updates","url":"https://github.com/agrc/wfrc-wasatch-choice/pull/339","created":"2026-01-01T23:01:12Z","updated":"2026-02-04T23:14:52Z"},{"number":338,"title":"chore(deps): bump the ci-dependencies group with 2 updates","url":"https://github.com/agrc/wfrc-wasatch-choice/pull/338","created":"2026-01-01T22:54:30Z","updated":"2026-02-04T23:14:52Z"}]},{"name":"plpco-rdcc-notifications","fullName":"agrc/plpco-rdcc-notifications","url":"https://github.com/agrc/plpco-rdcc-notifications","language":"JavaScript","topics":["billable","government-app","scheduled-tool","terraform-managed"],"prs":[{"number":194,"title":"deps: bump axios from 1.13.2 to 1.13.5","url":"https://github.com/agrc/plpco-rdcc-notifications/pull/194","created":"2026-02-11T19:25:45Z","updated":"2026-02-11T19:25:46Z"},{"number":193,"title":"deps: bump the safe-dependencies group with 5 updates","url":"https://github.com/agrc/plpco-rdcc-notifications/pull/193","created":"2026-01-01T17:54:53Z","updated":"2026-01-01T17:54:54Z"},{"number":192,"title":"chore(deps): bump the ci-dependencies group with 2 updates","url":"https://github.com/agrc/plpco-rdcc-notifications/pull/192","created":"2026-01-01T17:54:31Z","updated":"2026-01-01T17:54:32Z"}]},{"name":"electrofishing","fullName":"agrc/electrofishing","url":"https://github.com/agrc/electrofishing","language":"JavaScript","topics":[],"prs":[{"number":506,"title":"chore(deps): bump the ci-dependencies group across 1 directory with 3 updates","url":"https://github.com/agrc/electrofishing/pull/506","created":"2026-02-03T21:19:40Z","updated":"2026-02-04T16:28:57Z"},{"number":505,"title":"deps(dev): bump the major-app-dependencies group with 6 updates","url":"https://github.com/agrc/electrofishing/pull/505","created":"2026-01-01T23:03:59Z","updated":"2026-02-04T16:28:56Z"},{"number":504,"title":"deps: bump the safe-app-dependencies group with 16 updates","url":"https://github.com/agrc/electrofishing/pull/504","created":"2026-01-01T23:01:17Z","updated":"2026-02-04T16:28:55Z"}]},{"name":"broadband","fullName":"agrc/broadband","url":"https://github.com/agrc/broadband","language":"TypeScript","topics":["billable","government-app","terraform-managed","website"],"prs":[{"number":215,"title":"deps: bump glob from 10.4.5 to 10.5.0","url":"https://github.com/agrc/broadband/pull/215","created":"2026-01-21T23:03:20Z","updated":"2026-01-21T23:03:21Z"},{"number":214,"title":"deps: bump the safe-dependencies group with 12 updates","url":"https://github.com/agrc/broadband/pull/214","created":"2026-01-01T03:58:52Z","updated":"2026-01-01T03:58:53Z"},{"number":213,"title":"build(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/broadband/pull/213","created":"2026-01-01T03:54:09Z","updated":"2026-01-01T03:54:10Z"}]},{"name":"deq-spills","fullName":"agrc/deq-spills","url":"https://github.com/agrc/deq-spills","language":"JavaScript","topics":["forklift-pallet","government-app","salesforce","terraform-managed","website"],"prs":[{"number":183,"title":"deps: bump the safe-dependencies group across 3 directories with 24 updates","url":"https://github.com/agrc/deq-spills/pull/183","created":"2026-01-16T17:16:52Z","updated":"2026-01-16T17:16:53Z"},{"number":182,"title":"deps(dev): bump the major-dependencies group across 1 directory with 4 updates","url":"https://github.com/agrc/deq-spills/pull/182","created":"2026-01-01T06:07:25Z","updated":"2026-01-01T06:07:26Z"},{"number":180,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/deq-spills/pull/180","created":"2026-01-01T05:54:08Z","updated":"2026-01-01T05:54:09Z"}]},{"name":"dolly-carton","fullName":"agrc/dolly-carton","url":"https://github.com/agrc/dolly-carton","language":"Python","topics":["government-app","scheduled-tool","spatial-data-life-cycle","terraform-managed"],"prs":[{"number":48,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10","url":"https://github.com/agrc/dolly-carton/pull/48","created":"2026-01-01T18:55:11Z","updated":"2026-01-01T18:55:12Z"},{"number":47,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group across 1 directory","url":"https://github.com/agrc/dolly-carton/pull/47","created":"2026-01-01T18:54:57Z","updated":"2026-01-01T18:54:58Z"},{"number":46,"title":"deps(docker): bump osgeo/gdal from ubuntu-full-3.11.4 to ubuntu-full-3.12.1 in the docker-dependencies group","url":"https://github.com/agrc/dolly-carton/pull/46","created":"2026-01-01T18:54:06Z","updated":"2026-01-01T18:54:07Z"}]},{"name":"create-reminder-action","fullName":"agrc/create-reminder-action","url":"https://github.com/agrc/create-reminder-action","language":"TypeScript","topics":["github-action","government-app","terraform-managed"],"prs":[{"number":272,"title":"deps(dev): bump the major-dependencies group with 2 updates","url":"https://github.com/agrc/create-reminder-action/pull/272","created":"2026-01-01T15:55:46Z","updated":"2026-01-01T15:55:47Z"},{"number":271,"title":"deps(dev): bump the safe-dependencies group with 6 updates","url":"https://github.com/agrc/create-reminder-action/pull/271","created":"2026-01-01T15:55:21Z","updated":"2026-01-01T15:55:22Z"},{"number":270,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/create-reminder-action/pull/270","created":"2026-01-01T15:54:08Z","updated":"2026-01-01T15:54:09Z"}]},{"name":"plpco-access-map","fullName":"agrc/plpco-access-map","url":"https://github.com/agrc/plpco-access-map","language":"JavaScript","topics":["billable","government-app","terraform-managed","website"],"prs":[{"number":242,"title":"deps(dev): bump the major-dependencies group with 5 updates","url":"https://github.com/agrc/plpco-access-map/pull/242","created":"2026-01-01T14:58:06Z","updated":"2026-01-01T14:58:07Z"},{"number":241,"title":"deps: bump the safe-dependencies group with 11 updates","url":"https://github.com/agrc/plpco-access-map/pull/241","created":"2026-01-01T14:56:48Z","updated":"2026-01-01T14:56:48Z"},{"number":240,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/plpco-access-map/pull/240","created":"2026-01-01T14:54:07Z","updated":"2026-01-01T14:54:08Z"}]},{"name":"reminder-action","fullName":"agrc/reminder-action","url":"https://github.com/agrc/reminder-action","language":"TypeScript","topics":["github-action","government-app","terraform-managed"],"prs":[{"number":221,"title":"deps(dev): bump the major-dependencies group with 2 updates","url":"https://github.com/agrc/reminder-action/pull/221","created":"2026-01-01T14:55:32Z","updated":"2026-01-01T14:55:32Z"},{"number":220,"title":"deps(dev): bump the safe-dependencies group with 5 updates","url":"https://github.com/agrc/reminder-action/pull/220","created":"2026-01-01T14:55:06Z","updated":"2026-01-01T14:55:07Z"},{"number":219,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/reminder-action/pull/219","created":"2026-01-01T14:54:19Z","updated":"2026-01-01T14:54:19Z"}]},{"name":"service-now-worknote-action","fullName":"agrc/service-now-worknote-action","url":"https://github.com/agrc/service-now-worknote-action","language":"TypeScript","topics":["github-action","government-app","terraform-managed"],"prs":[{"number":132,"title":"deps: bump the major-dependencies group with 4 updates","url":"https://github.com/agrc/service-now-worknote-action/pull/132","created":"2026-01-01T11:55:54Z","updated":"2026-01-01T11:55:54Z"},{"number":131,"title":"deps(dev): bump the safe-dependencies group with 5 updates","url":"https://github.com/agrc/service-now-worknote-action/pull/131","created":"2026-01-01T11:55:10Z","updated":"2026-01-01T11:55:11Z"},{"number":130,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/service-now-worknote-action/pull/130","created":"2026-01-01T11:54:11Z","updated":"2026-01-01T11:54:12Z"}]},{"name":"plss","fullName":"agrc/plss","url":"https://github.com/agrc/plss","language":"JavaScript","topics":["billable","government-app","terraform-managed","website"],"prs":[{"number":510,"title":"deps: bump the major-app-dependencies group with 11 updates","url":"https://github.com/agrc/plss/pull/510","created":"2026-01-01T05:17:51Z","updated":"2026-01-01T05:17:52Z"},{"number":509,"title":"deps: bump the safe-app-dependencies group with 23 updates","url":"https://github.com/agrc/plss/pull/509","created":"2026-01-01T05:09:47Z","updated":"2026-01-01T05:09:48Z"},{"number":508,"title":"chore(deps): bump the ci-dependencies group with 2 updates","url":"https://github.com/agrc/plss/pull/508","created":"2026-01-01T04:54:16Z","updated":"2026-01-01T04:54:17Z"}]},{"name":"udot-parcel-ml","fullName":"agrc/udot-parcel-ml","url":"https://github.com/agrc/udot-parcel-ml","language":"Python","topics":["artificial-intelligence","computer-vision","gis","government","image","machine-learning","utah"],"prs":[{"number":173,"title":"deps: update google-cloud-storage requirement from ~=3.4 to ~=3.7","url":"https://github.com/agrc/udot-parcel-ml/pull/173","created":"2026-01-01T05:01:18Z","updated":"2026-01-01T05:01:19Z"},{"number":172,"title":"deps: update fastparquet requirement from ~=2024.11 to ~=2025.12","url":"https://github.com/agrc/udot-parcel-ml/pull/172","created":"2026-01-01T05:00:58Z","updated":"2026-01-01T05:00:58Z"},{"number":171,"title":"chore(deps): bump buildpacks/github-actions from 5.9.7 to 5.10.0 in the ci-dependencies group","url":"https://github.com/agrc/udot-parcel-ml/pull/171","created":"2026-01-01T04:54:41Z","updated":"2026-01-01T04:54:42Z"}]},{"name":"firebase-auth-arcgis-server-proxy","fullName":"agrc/firebase-auth-arcgis-server-proxy","url":"https://github.com/agrc/firebase-auth-arcgis-server-proxy","language":"JavaScript","topics":["government-app","npm-package","terraform-managed"],"prs":[{"number":196,"title":"deps: bump the major-dependencies group with 2 updates","url":"https://github.com/agrc/firebase-auth-arcgis-server-proxy/pull/196","created":"2026-01-01T04:55:48Z","updated":"2026-01-01T04:55:48Z"},{"number":195,"title":"deps: bump the safe-dependencies group with 6 updates","url":"https://github.com/agrc/firebase-auth-arcgis-server-proxy/pull/195","created":"2026-01-01T04:55:23Z","updated":"2026-01-01T04:55:24Z"},{"number":194,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/firebase-auth-arcgis-server-proxy/pull/194","created":"2026-01-01T04:54:04Z","updated":"2026-01-01T04:54:05Z"}]},{"name":"deq-tanks-salesforce","fullName":"agrc/deq-tanks-salesforce","url":"https://github.com/agrc/deq-tanks-salesforce","language":"JavaScript","topics":["billable","government-app","salesforce","terraform-managed"],"prs":[{"number":9,"title":"deps(dev): bump the safe-dependencies group with 8 updates","url":"https://github.com/agrc/deq-tanks-salesforce/pull/9","created":"2026-01-01T15:55:32Z","updated":"2026-01-01T15:55:32Z"},{"number":8,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/deq-tanks-salesforce/pull/8","created":"2026-01-01T15:54:03Z","updated":"2026-01-01T15:54:04Z"}]},{"name":"masquerade","fullName":"agrc/masquerade","url":"https://github.com/agrc/masquerade","language":"Python","topics":["government-app","http-api","terraform-managed"],"prs":[{"number":252,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10","url":"https://github.com/agrc/masquerade/pull/252","created":"2026-01-01T14:54:49Z","updated":"2026-01-01T14:54:50Z"},{"number":251,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/masquerade/pull/251","created":"2026-01-01T14:54:19Z","updated":"2026-01-01T14:54:20Z"}]},{"name":"parcels","fullName":"agrc/parcels","url":"https://github.com/agrc/parcels","language":"TypeScript","topics":["government-app","terraform-managed","website"],"prs":[{"number":233,"title":"deps(dev): bump vitest from 3.2.4 to 4.0.6 in the major-dependencies group","url":"https://github.com/agrc/parcels/pull/233","created":"2026-01-01T14:07:00Z","updated":"2026-01-01T14:07:01Z"},{"number":232,"title":"deps: bump the safe-dependencies group with 24 updates","url":"https://github.com/agrc/parcels/pull/232","created":"2026-01-01T14:06:21Z","updated":"2026-01-01T14:06:22Z"}]},{"name":"sweeper","fullName":"agrc/sweeper","url":"https://github.com/agrc/sweeper","language":"Python","topics":["government-app","scheduled-tool","spatial-data-life-cycle","terraform-managed"],"prs":[{"number":144,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10","url":"https://github.com/agrc/sweeper/pull/144","created":"2026-01-01T07:56:15Z","updated":"2026-01-01T07:56:16Z"},{"number":143,"title":"chore(deps): bump the ci-dependencies group with 3 updates","url":"https://github.com/agrc/sweeper/pull/143","created":"2026-01-01T07:54:23Z","updated":"2026-01-01T07:54:24Z"}]},{"name":"open-sgid","fullName":"agrc/open-sgid","url":"https://github.com/agrc/open-sgid","language":"Python","topics":["government-app","scheduled-tool","spatial-data-life-cycle","terraform-managed"],"prs":[{"number":93,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10","url":"https://github.com/agrc/open-sgid/pull/93","created":"2026-01-01T07:55:17Z","updated":"2026-01-01T07:55:17Z"},{"number":92,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/open-sgid/pull/92","created":"2026-01-01T07:54:29Z","updated":"2026-01-01T07:54:29Z"}]},{"name":"supervisor","fullName":"agrc/supervisor","url":"https://github.com/agrc/supervisor","language":"Python","topics":["government-app","python-package","terraform-managed"],"prs":[{"number":63,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10","url":"https://github.com/agrc/supervisor/pull/63","created":"2026-01-01T03:54:44Z","updated":"2026-02-04T00:55:02Z"},{"number":62,"title":"chore(deps): bump the ci-dependencies group with 3 updates","url":"https://github.com/agrc/supervisor/pull/62","created":"2026-01-01T03:54:27Z","updated":"2026-02-04T00:55:01Z"}]},{"name":"api.mapserv.utah.gov","fullName":"agrc/api.mapserv.utah.gov","url":"https://github.com/agrc/api.mapserv.utah.gov","language":"C#","topics":["api","api-rest","aspnet-core","aspnet-core-mvc","aspnetcore","astro","documentation","esri","firebase","geojson","geolocation","government","react","self-service","starlight","utah"],"prs":[{"number":644,"title":"deps(web): bump axios from 1.13.2 to 1.13.5 in /src/developer/functions","url":"https://github.com/agrc/api.mapserv.utah.gov/pull/644","created":"2026-02-11T19:23:20Z","updated":"2026-02-11T19:23:20Z"}]},{"name":"gis.utah.gov","fullName":"agrc/gis.utah.gov","url":"https://github.com/agrc/gis.utah.gov","language":"HTML","topics":["astro","geodatabase","gis","government","government-data","government-organisations","html","markdown","netlify","open-data","shapefile","tailwindcss","utah","website"],"prs":[{"number":3228,"title":"chore(deps): bump the npm_and_yarn group across 2 directories with 3 updates","url":"https://github.com/agrc/gis.utah.gov/pull/3228","created":"2026-02-11T17:49:36Z","updated":"2026-02-11T17:52:06Z"}]},{"name":"roadkill-mobile","fullName":"agrc/roadkill-mobile","url":"https://github.com/agrc/roadkill-mobile","language":"JavaScript","topics":["billable","government-app","mobile-app","palletjack-skid","terraform-managed","website"],"prs":[{"number":381,"title":"chore(deps): bump the npm_and_yarn group across 4 directories with 9 updates","url":"https://github.com/agrc/roadkill-mobile/pull/381","created":"2026-02-03T19:15:08Z","updated":"2026-02-03T19:15:10Z"}]},{"name":"skid","fullName":"agrc/skid","url":"https://github.com/agrc/skid","language":"Python","topics":["government-app","palletjack-skid","terraform-managed"],"prs":[{"number":46,"title":"deps: update ugrc-palletjack requirement from <5.3,>=5.0 to >=5.0,<6.1","url":"https://github.com/agrc/skid/pull/46","created":"2026-02-01T23:13:08Z","updated":"2026-02-01T23:13:09Z"}]},{"name":"deq-eid-skid","fullName":"agrc/deq-eid-skid","url":"https://github.com/agrc/deq-eid-skid","language":"Python","topics":["billable","government-app","palletjack-skid","terraform-managed"],"prs":[{"number":46,"title":"deps: update ugrc-palletjack requirement from ==5.* to >=5,<7","url":"https://github.com/agrc/deq-eid-skid/pull/46","created":"2026-02-01T20:44:47Z","updated":"2026-02-01T20:44:48Z"}]},{"name":"nfhl-skid","fullName":"agrc/nfhl-skid","url":"https://github.com/agrc/nfhl-skid","language":"Python","topics":["billable","government-app","palletjack-skid","terraform-managed"],"prs":[{"number":55,"title":"deps: update ugrc-palletjack requirement from <5.3,>=5.0 to >=5.0,<6.1","url":"https://github.com/agrc/nfhl-skid/pull/55","created":"2026-02-01T14:23:13Z","updated":"2026-02-01T14:23:14Z"}]},{"name":"honeycomb","fullName":"agrc/honeycomb","url":"https://github.com/agrc/honeycomb","language":"Python","topics":[],"prs":[{"number":38,"title":"deps(dev): update pytest requirement from ==8.* to >=8,<10","url":"https://github.com/agrc/honeycomb/pull/38","created":"2026-01-01T17:54:58Z","updated":"2026-01-01T17:54:59Z"}]},{"name":"cloud-run-docker-deploy-composite-action","fullName":"agrc/cloud-run-docker-deploy-composite-action","url":"https://github.com/agrc/cloud-run-docker-deploy-composite-action","language":"Unknown","topics":["github-composite-action","government-app","terraform-managed"],"prs":[{"number":38,"title":"deps: bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/cloud-run-docker-deploy-composite-action/pull/38","created":"2026-01-01T17:54:29Z","updated":"2026-01-01T17:54:29Z"}]},{"name":"swapper","fullName":"agrc/swapper","url":"https://github.com/agrc/swapper","language":"Python","topics":["government-app","manual-tool","python-package","spatial-data-life-cycle","terraform-managed"],"prs":[{"number":41,"title":"chore(deps): bump the ci-dependencies group with 3 updates","url":"https://github.com/agrc/swapper/pull/41","created":"2026-01-01T13:54:20Z","updated":"2026-01-01T13:54:20Z"}]},{"name":"electrofishing-query","fullName":"agrc/electrofishing-query","url":"https://github.com/agrc/electrofishing-query","language":"TypeScript","topics":["billable","government-app","terraform-managed","website"],"prs":[{"number":324,"title":"deps(dev): bump storybook from 9.1.16 to 9.1.17","url":"https://github.com/agrc/electrofishing-query/pull/324","created":"2026-01-01T13:39:32Z","updated":"2026-01-01T13:39:33Z"}]},{"name":"forklift","fullName":"agrc/forklift","url":"https://github.com/agrc/forklift","language":"Python","topics":["arcgis","arcgis-server","esri","etl","fgdb","file-geodatabase","geospatial","geospatial-data","python"],"prs":[{"number":395,"title":"chore(deps): bump actions/checkout from 5 to 6 in the ci-dependencies group","url":"https://github.com/agrc/forklift/pull/395","created":"2026-01-01T08:54:18Z","updated":"2026-01-01T08:54:19Z"}]}];
+
+        function toggleRepo(card) {
+            card.classList.toggle('expanded');
+            const prList = card.querySelector('.pr-list');
+            prList.classList.toggle('hidden');
+        }
+
+        function filterRepos() {
+            const languageFilter = document.getElementById('language-filter').value;
+            const selectedTopics = Array.from(document.querySelectorAll('.topic-checkbox:checked')).map(cb => cb.value);
+            const cards = document.querySelectorAll('.repo-card');
+
+            let visibleCount = 0;
+            let visiblePRCount = 0;
+
+            cards.forEach(card => {
+                const cardLanguage = card.dataset.language;
+                const cardTopics = card.dataset.topics.split(',').filter(t => t);
+
+                const languageMatch = !languageFilter || cardLanguage === languageFilter;
+                // If topics are selected, repo must have at least one of the selected topics
+                const topicMatch = selectedTopics.length === 0 || selectedTopics.some(topic => cardTopics.includes(topic));
+
+                if (languageMatch && topicMatch) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                    // Count PRs from this repo
+                    const prCount = parseInt(card.querySelector('.pr-count-gradient').textContent);
+                    visiblePRCount += prCount;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Update stats
+            document.getElementById('repo-count').textContent = visibleCount;
+            document.getElementById('total-prs').textContent = visiblePRCount;
+        }
+
+        function clearFilters() {
+            document.getElementById('language-filter').value = '';
+            document.querySelectorAll('.topic-checkbox').forEach(cb => cb.checked = false);
+            filterRepos();
+        }
+
+        // Attach filter listeners
+        document.getElementById('language-filter').addEventListener('change', filterRepos);
+        document.querySelectorAll('.topic-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', filterRepos);
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.expanded').forEach(card => {
+                    card.classList.remove('expanded');
+                    card.querySelector('.pr-list').classList.add('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

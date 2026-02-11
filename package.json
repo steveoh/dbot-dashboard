@@ -1,0 +1,17 @@
+{
+  "name": "dbot-group",
+  "version": "1.0.0",
+  "description": "Dashboard for grouping Dependabot PRs by repository",
+  "main": "process_prs.js",
+  "scripts": {
+    "build": "node process_prs.js",
+    "serve": "node process_prs.js && open dependabot-prs.html"
+  },
+  "keywords": ["dependabot", "github", "dashboard"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "tailwindcss": "^4.1.18"
+  }
+}
